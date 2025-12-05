@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: finops_db
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./export_sql/combined.sql:/docker-entrypoint-initdb.d/combined.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 10s
@@ -49,3 +50,4 @@ services:
 
 volumes:
   db_data:
+  export_sql:

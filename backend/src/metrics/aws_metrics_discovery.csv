@@ -1,0 +1,17 @@
+Service,Namespace,MetricName,Dimensions,RelevanceScore,Cost
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUUtilization,InstanceId=i-0690d803c172bde00,25,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUUtilization,InstanceId=i-02a01e4ec8dc249f5,25,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUUtilization,InstanceId=i-08e2ea938bbedadf6,25,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUUtilization,InstanceId=i-0a27b192a1e36a98c,25,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,InstanceEBSThroughputExceededCheck,InstanceId=i-0690d803c172bde00,15,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,InstanceEBSThroughputExceededCheck,InstanceId=i-08e2ea938bbedadf6,15,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,InstanceEBSThroughputExceededCheck,InstanceId=i-0a27b192a1e36a98c,15,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUCreditUsage,InstanceId=i-02a01e4ec8dc249f5,5,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUCreditBalance,InstanceId=i-02a01e4ec8dc249f5,5,$423.04
+Amazon Elastic Compute Cloud - Compute,AWS/EC2,CPUSurplusCreditsCharged,InstanceId=i-02a01e4ec8dc249f5,5,$423.04
+AWS Lambda,AWS/Lambda,Duration,N/A,10,$0.00
+AWS Lambda,AWS/Lambda,Duration,"FunctionName=Daily_Cost_Report, Resource=Daily_Cost_Report",10,$0.00
+AWS Lambda,AWS/Lambda,Duration,FunctionName=Daily_Cost_Report,10,$0.00
+AWS Lambda,AWS/Lambda,Errors,N/A,5,$0.00
+AWS Lambda,AWS/Lambda,Errors,"FunctionName=Daily_Cost_Report, Resource=Daily_Cost_Report",5,$0.00
+AWS Lambda,AWS/Lambda,Errors,FunctionName=Daily_Cost_Report,5,$0.00
