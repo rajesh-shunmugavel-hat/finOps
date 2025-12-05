@@ -108,3 +108,15 @@ class AwsCost(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
  
+
+class AwsServiceTagCost(Base):
+    __tablename__ = "aws_service_tag_costs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    activity_date = Column(DateTime, nullable=False, index=True)
+    service_name = Column(String(255), nullable=False, index=True)
+    tag_key = Column(String(255), nullable=False, index=True)
+    tag_value = Column(String(255), nullable=True)
+    cost = Column(Float, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

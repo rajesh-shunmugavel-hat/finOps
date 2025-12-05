@@ -199,6 +199,42 @@ Focus on identifying:
         
         return prompt
 
+    def get_direct_recommendation(
+        self,
+        cost_data: List[Dict[str, Any]],
+        metrics_data: List[Dict[str, Any]],
+        service_info: Dict[str, Any]
+    ) -> str:
+        
+        prompt = "You are an expert AWS FinOps consultant. Based on the following data for a specific AWS resource, provide a concise cost optimization recommendation.\n\n"
+        
+        prompt += "## Service Information\n"
+        for key, value in service_info.items():
+            prompt += f"- {key.replace('_', ' ').title()}: {value}\n"
+            
+        prompt += "\n## Recent Cost Data\n"
+        if not cost_data:
+            prompt += "- No cost data available for this period.\n"
+        for item in cost_data:
+            prompt += f"- From {item['start_date']} to {item['end_date']}: ${item['cost']:.2f} (Usage: {item['usage_quantity']} {item['usage_unit']})\n"
+
+        prompt += "\n## Recent Metrics Data\n"
+        if not metrics_data:
+            prompt += "- No metrics data available for this period.\n"
+        for item in metrics_data:
+            prompt += f"- Metric '{item['metric_name']}': {item['value']:.2f} {item['unit']} at {item['timestamp']}\n"
+            
+        prompt += "\n## Recommendation Request\n"
+        prompt += "Is the cost for this resource justified by its usage? Provide a clear 'Justified', 'Not Justified', or 'Partially Justified' assessment, followed by a brief explanation and a specific, actionable recommendation if any savings are possible."
+
+        try:
+            response = self.client.generate_content(prompt)
+            return response.text
+        except Exception as e:
+            logger.error(f"Error getting direct recommendation: {e}")
+            return f"Error: Could not get recommendation. {e}"
+
+
 gemini_service = GeminiService()
 
 
