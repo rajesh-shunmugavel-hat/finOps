@@ -23,8 +23,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      DATABASE_URL: postgresql+psycopg2://finops_user:finops_pass@db:5432/finops_db
+    # environment:
+    #   DATABASE_URL: postgresql+psycopg2://finops_user:finops_pass@db:5432/finops_db
       # Add other env vars like OPENAI_API_KEY or AWS credentials if needed
     ports:
       - "5000:5000"
@@ -34,6 +34,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    env_file:
+      - path: backend/.env
 
   frontend:
     build:
