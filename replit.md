@@ -94,25 +94,4 @@ Uses Replit's built-in PostgreSQL database with the following tables:
 - Comprehensive CloudWatch metrics for each service type
 - Multi-persona reporting (DevOps, Finance, CTO views)
 
-## Running the Project
-1. Backend: 
-"""
-cd backend
-pyenv local 3.12.4
-pyenv rehash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-"""
-2. Frontend: `cd frontend && npm run dev`
 
-## Environment Variables
-- `DATABASE_URL` - PostgreSQL connection string (auto-configured by Replit)
-- `OPENAI_API_KEY` - Required for AI analysis (optional - falls back to mock data)
-
-## Seeding Data
-To reset and reseed the database:
-```bash
-cd backend && python seed_data.py
-```

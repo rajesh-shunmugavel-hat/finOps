@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: finops_user
+      POSTGRES_PASSWORD: finops_pass
+      POSTGRES_DB: finops_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://finops_user:finops_pass@db:5432/finops_db
+      # Add other env vars like OPENAI_API_KEY or AWS credentials if needed
+    ports:
+      - "5000:5000"
+    # No bind-mount here so the container uses the files baked into the image
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import sys,urllib.request as r; r.urlopen('http://localhost:5000/health');\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    # No bind-mount here so the container serves the built assets inside the image
+
+volumes:
+  db_data:

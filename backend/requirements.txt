@@ -1,0 +1,9 @@
+apscheduler>=3.11.1
+boto3>=1.42.3
+fastapi>=0.123.9
+openai>=2.9.0
+psycopg2-binary>=2.9.11
+pydantic>=2.12.5
+python-dotenv>=1.2.1
+sqlalchemy>=2.0.44
+uvicorn>=0.38.0
