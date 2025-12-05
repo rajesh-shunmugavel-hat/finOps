@@ -16,7 +16,7 @@ interface LayoutProps {
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Reports', href: '/reports', icon: FileText },
-  { name: 'Departments', href: '/departments', icon: Building2 },
+  { name: 'Projects', href: '/departments', icon: Building2 },
 ]
 
 export default function Layout({ children }: LayoutProps) {
