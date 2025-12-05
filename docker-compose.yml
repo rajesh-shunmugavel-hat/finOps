@@ -35,7 +35,7 @@ services:
       timeout: 5s
       retries: 5
     env_file:
-      - path: backend/.env
+      - backend/.env
 
   frontend:
     build:

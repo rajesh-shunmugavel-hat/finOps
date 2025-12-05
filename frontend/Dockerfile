@@ -9,6 +9,8 @@ COPY vite.config.ts ./
 COPY index.html ./
 COPY public ./public
 COPY src ./src
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
 # Install dependencies. npm ci is preferred for reproducible builds but can fail
 # in some environments (lockfile mismatch, private registries). Try npm ci
 # and if it fails, fall back to npm install with legacy peer deps and print
