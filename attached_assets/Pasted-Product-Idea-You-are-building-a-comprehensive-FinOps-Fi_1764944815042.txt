@@ -1,0 +1,81 @@
+Product Idea:
+You are building a comprehensive FinOps (Financial Operations) product prototype designed to help companies optimize their cloud spending. The system needs to integrate multiple technologies across frontend, backend, database, and AI layers to create a cohesive platform that provides visibility into AWS costs and actionable optimization recommendations. This prototype will serve three distinct user personas with different priorities: DevOps engineers who need to identify over-provisioned services for right-sizing, finance teams who require cost trends by department for accurate budget allocation, and CTOs who need AI-generated executive summaries of wasteful spending with ROI on proposed fixes.
+
+Access Level : Cost Explorer and Cloudwatch Metric ReadOnly
+
+Task
+The assistant should create a complete, production-ready FinOps prototype with the following components:
+
+1. Frontend (React): Build interactive dashboards displaying cloud spend overview, AWS service cost drilldowns, cost and usage metrics, and a history of AI-generated reports. The UI should enable users to navigate between different cost categories and view detailed service-level breakdowns, and it should be user friendly and easy to use and data visualization should be very clear and easy understable even for a person who is a beginner for the AWS
+2. Backend (FastAPI): Develop REST API endpoints that serve cost and usage data per service,metrics per service, AI analysis requests. The backend should integrate with LangChain and OpenAI to generate AI-driven analysis.
+3. Database (PostgreSQL): Design a schema to store AWS cost/usage metrics, AI analysis reports with timestamps, recommendations, historical data for trend analysis.
+4. AI Integration (LangChain + OpenAI): Implement logic that analyzes service cost, service metrics data to determine if spending is justified, generates specific optimization steps when spending is not justified using relevent AWS cloudwatch metrics, and recommends AWS feature upgrades or cost-saving alternatives.
+5. Infrastructure: Provide a docker-compose file that orchestrates all services (React frontend, FastAPI backend, PostgreSQL database) for local development and deployment.
+6. Mock Data: Include seeded PostgreSQL data representing realistic AWS cost and usage metrics across multiple services (EC2, RDS, S3, Lambda, etc.) to enable immediate testing and demonstration. AWS Cloudwatch metrics usage for all service  The mock data should reflect patterns from AWS Cost Explorer exports and include department/team cost allocation to support budget tracking use cases.
+7. Code Structure: Organize the codebase following production standards with clear separation of concerns, proper error handling, environment configuration, and documentation.
+
+Don'ts :
+1. No need for auth (login,signup,etc)
+2. Don't existing structure , be creativity
+
+Objective
+Deliver a fully functional prototype that demonstrates how AI-powered analysis can help organizations identify unjustified cloud spending, receive actionable optimization recommendations tailored to different stakeholder needs, and track cost management over time. The prototype should be immediately deployable, testable with realistic data, and serve as a foundation for further development.
+
+Knowledge
+- The AI analysis should evaluate cost justification based on usage patterns, service efficiency, and industry best practices.
+- Optimization recommendations must be specific and actionable (e.g., "Migrate 15 unused t3.large instances to t3.micro to save $2,400/month" or "Enable S3 Intelligent-Tiering on bucket-name to reduce storage costs by 30%"). Each recommendation should include estimated ROI and implementation effort.
+- The system should track the history of AI reports to show cost trends and the impact of previous recommendations.
+- Technical cost insights should include metrics such as cost per service, cost trends over time, unused resources, potential savings opportunities, and departmental cost allocation.
+- Mock data should represent realistic AWS billing scenarios including multiple services, varying usage patterns, department/team assignments, and opportunities for optimization. This data should align with typical AWS Cost Explorer export patterns and AWS Cloudwatch metrics .
+- User personas have distinct information needs: 
+
+Examples
+Example 1 - Dashboard Overview:
+The main dashboard displays:
+- Total monthly spend: $15,420
+- Cost breakdown by service (pie chart): EC2 (45%), RDS (25%), S3 (15%), Lambda (10%), Other (5%)
+- Month-over-month trend (line chart)
+- Top 3 cost drivers with drill-down capability
+- "Analyze with AI" button to trigger cost justification analysis
+- Departmental cost breakdown (for finance teams): Engineering ($8,200), Data Science ($4,100), Infrastructure ($3,120)
+
+
+Example 2 - AI Analysis Report:
+Analysis Date: 2024-01-15
+Status: Optimization Opportunities Found
+
+Finding 1: EC2 Instances
+- Current Spend: $6,939/month
+- Assessment: NOT JUSTIFIED
+- Issue: 8 t3.large instances running 24/7 with <5% average CPU utilization
+- Recommendation: Downsize to t3.micro (saves $1,800/month) or use Auto Scaling to match demand
+- Estimated Savings: $1,800/month
+- ROI: 100% savings within 1 month, implementation effort: 2 hours
+- Affected Department: Engineering
+
+Finding 2: RDS Database
+- Current Spend: $3,855/month
+- Assessment: JUSTIFIED
+- Reason: Multi-AZ setup with consistent 70% CPU and 60% memory utilization
+- Recommendation: None required
+
+Finding 3: S3 Storage
+- Current Spend: $2,313/month
+- Assessment: PARTIALLY JUSTIFIED
+- Issue: 500GB of infrequently accessed data in Standard storage
+- Recommendation: Enable S3 Intelligent-Tiering or transition to Glacier for 80% of data
+- Estimated Savings: $1,200/month
+- ROI: 52% cost reduction, implementation effort: 1 hour
+- Affected Department: Data Science
+
+Executive Summary for CTO: Total identified savings: $3,000/month (19.5% reduction). Highest ROI opportunities: EC2 right-sizing and S3 tiering. Recommended implementation timeline: 2 weeks.
+
+
+Example 3 - Service Drilldown (EC2):
+Service: EC2
+Total Monthly Cost: $6,939
+Instances:
+- prod-web-01: t3.large, $150/month, CPU: 8%, Memory: 12%, Status: Underutilized, Department: Engineering
+- prod-db-backup: t3.xlarge, $300/month, CPU: 0.5%, Memory: 1%, Status: Severely Underutilized, Department: Infrastructure
+Recommendations: Consolidate web instances, terminate or downsize backup instance
+Finance View: Engineering department EC2 costs: $450/month; Infrastructure department EC2 costs: $300/month
