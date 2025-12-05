@@ -5,18 +5,18 @@ from typing import List, Optional
 from src.database import get_db
 from src.models import Report, ReportStatus, AwsCost, Metric
 from src.schemas import ReportSchema, ReportGenerateRequest
-from src.openai_service import openai_service
+from src.gemini_service import gemini_service
 
 router = APIRouter()
 
 def generate_report_async(db_session_maker, report_id: int, scope: str, period_days: int):
     db = db_session_maker()
     try:
-        if not openai_service.is_configured():
+        if not gemini_service.is_configured():
             report = db.query(Report).filter(Report.id == report_id).first()
             if report:
                 report.status = ReportStatus.FAILED
-                report.raw_ai_response = "OpenAI API key not configured. Please set OPENAI_API_KEY environment variable."
+                report.raw_ai_response = "Gemini API key not configured. Please set GEMINI_API_KEY environment variable."
                 db.commit()
             return
         
@@ -66,7 +66,7 @@ def generate_report_async(db_session_maker, report_id: int, scope: str, period_d
             for m in metrics
         ]
         
-        openai_service.generate_cost_optimization_report(
+        gemini_service.generate_cost_optimization_report(
             db, report_id, cost_data, metrics_data, scope
         )
     except Exception as e:
@@ -134,10 +134,10 @@ def generate_report(
 ):
     from src.database import SessionLocal
     
-    if not openai_service.is_configured():
+    if not gemini_service.is_configured():
         raise HTTPException(
             status_code=503,
-            detail="OpenAI API is not configured. Please set OPENAI_API_KEY environment variable to enable AI report generation."
+            detail="Gemini API is not configured. Please set GEMINI_API_KEY environment variable to enable AI report generation."
         )
     
     end_date = datetime.now()
