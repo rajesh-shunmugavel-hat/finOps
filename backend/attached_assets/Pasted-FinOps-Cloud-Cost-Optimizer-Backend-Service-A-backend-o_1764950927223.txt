@@ -1,0 +1,54 @@
+FinOps Cloud Cost Optimizer — Backend Service
+
+A backend-only FinOps platform for AWS cost visibility and optimization. It automatically ingests AWS Cost Explorer and CloudWatch metrics (read-only), stores historical data in PostgreSQL, and generates AI-powered cost optimization reports using OpenAI. The API provides dashboards, service drilldowns, and department cost breakdowns — enabling DevOps, Finance, and CTO teams to understand spending, efficiency, and savings opportunities without needing a UI.
+
+Stack
+FastAPI (Python)
+PostgreSQL
+Docker compose for local dev/test
+SQLAlchemy ORM
+Background worker for AWS ingestion + AI analysis (Celery/RQ/APScheduler)
+OpenAI API for AI recommendations
+
+Functionality
+Fetch AWS Cost Explorer + CloudWatch metrics (read-only), store in Postgres
+API-only product (no UI)
+AI generates cost optimization reports and stores responses in DB
+IAM integration for secure AWS access (read-only)
+
+API Endpoints
+GET /api/dashboard → cost summaries (total, top services, departments)
+GET /api/services → list services with cost
+GET /api/services/{name} → service details
+GET /api/services/{name}/resources → resources + cost attribution
+GET /api/services/{name}/metrics → CloudWatch metrics (time-series)
+GET /api/reports → list past AI reports
+GET /api/reports/{id} → report details
+POST /api/reports/generate → trigger AI report generation (async)
+GET /api/departments → dept-level cost breakdown
+GET /health → health check
+
+AI Responsibility
+
+Identify service + usage
+Cost + metric breakdown
+Compare metrics vs cost → is cost justified?
+If justified → explain why
+If not → recommend concrete steps to reduce cost
+Suggest AWS services/features for savings
+Provide final cost report + recommendations
+Save AI response in DB (reports table)
+
+Database Models
+
+aws_costs(service_name, resource_id, cost, timestamps, metadata)
+metrics(service_name, resource_id, timestamp, metric_name, value)
+resources(resource_id, service_name, tags)
+departments(...)
+reports(status, scope, summary, recommendations, raw_ai_response)
+
+Env Requirements
+
+DATABASE_URL
+AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY
+OPENAI_API_KEY
