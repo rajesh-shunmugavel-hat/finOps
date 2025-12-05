@@ -98,7 +98,7 @@ export default function Departments() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Department Cost Analysis</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Project Cost Analysis</h1>
         <p className="text-gray-500 mt-1">Track spending and budget allocation by team</p>
       </div>
 
@@ -121,14 +121,14 @@ export default function Departments() {
           </p>
         </div>
         <div className="card">
-          <p className="text-sm text-gray-500">Departments</p>
+          <p className="text-sm text-gray-500">Projects</p>
           <p className="text-2xl font-bold text-gray-900 mt-1">{departments.length}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="card lg:col-span-1">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Departments</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Projects</h2>
           <div className="space-y-2">
             {departments.map((dept) => {
               const isSelected = selectedDept?.id === dept.id
@@ -281,7 +281,7 @@ export default function Departments() {
       </div>
 
       <div className="card">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Department Comparison</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Projects Comparison</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={departments}>
