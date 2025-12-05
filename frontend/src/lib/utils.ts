@@ -90,6 +90,13 @@ export const SERVICE_COLORS: Record<string, string> = {
   Lambda: '#96CEB4',
   Other: '#DDA0DD',
 }
+export const SERVICE_BG = [
+  "#FF6B6B",
+  "#4ECDC4",
+  "#45B7D1",
+  "#96CEB4",
+  "#DDA0DD",
+]
 
 export const CHART_COLORS = [
   '#3B82F6',
