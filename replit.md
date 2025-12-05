@@ -95,7 +95,16 @@ Uses Replit's built-in PostgreSQL database with the following tables:
 - Multi-persona reporting (DevOps, Finance, CTO views)
 
 ## Running the Project
-1. Backend: `cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload`
+1. Backend: 
+"""
+cd backend
+pyenv local 3.12.4
+pyenv rehash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+"""
 2. Frontend: `cd frontend && npm run dev`
 
 ## Environment Variables
