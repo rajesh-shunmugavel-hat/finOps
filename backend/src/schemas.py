@@ -88,7 +88,7 @@ class DashboardResponse(BaseModel):
     period_start: datetime
     period_end: datetime
     top_services: List[Dict[str, Any]]
-    top_departments: List[Dict[str, Any]]
+    # top_departments: List[Dict[str, Any]]
     cost_trend: List[Dict[str, Any]]
 
 class ServiceSummary(BaseModel):
