@@ -133,8 +133,8 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Cost by Service</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
+          <div style={{ width: '100%', height: 256 }}>
+            <ResponsiveContainer width="100%" height={256}>
               <PieChart>
                 <Pie
                   data={pieData}
@@ -178,8 +178,8 @@ export default function Dashboard() {
 
         <div className="card">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Trend</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
+          <div style={{ width: '100%', height: 256 }}>
+            <ResponsiveContainer width="100%" height={256}>
               <LineChart data={data.monthly_trend}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis 
@@ -267,8 +267,8 @@ export default function Dashboard() {
               View all
             </Link>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
+          <div style={{ width: '100%', height: 256 }}>
+            <ResponsiveContainer width="100%" height={256}>
               <BarChart data={data.departments} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis 
