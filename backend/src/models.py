@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from src.database import Base
 import enum
+from sqlalchemy import Column, Integer, String, Float, DateTime, JSON, func
+from sqlalchemy.ext.declarative import declarative_base
 
 class ReportStatus(str, enum.Enum):
     PENDING = "pending"
@@ -10,21 +12,21 @@ class ReportStatus(str, enum.Enum):
     COMPLETED = "completed"
     FAILED = "failed"
 
-class AwsCost(Base):
-    __tablename__ = "aws_costs"
+# class AwsCost(Base):
+#     __tablename__ = "aws_costs"
     
-    id = Column(Integer, primary_key=True, index=True)
-    service_name = Column(String(255), index=True, nullable=False)
-    resource_id = Column(String(255), index=True, nullable=True)
-    cost = Column(Float, nullable=False)
-    currency = Column(String(10), default="USD")
-    usage_quantity = Column(Float, nullable=True)
-    usage_unit = Column(String(100), nullable=True)
-    start_date = Column(DateTime, nullable=False)
-    end_date = Column(DateTime, nullable=False)
-    metadata_json = Column(JSON, nullable=True)
-    created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+#     id = Column(Integer, primary_key=True, index=True)
+#     service_name = Column(String(255), index=True, nullable=False)
+#     resource_id = Column(String(255), index=True, nullable=True)
+#     cost = Column(Float, nullable=False)
+#     currency = Column(String(10), default="USD")
+#     usage_quantity = Column(Float, nullable=True)
+#     usage_unit = Column(String(100), nullable=True)
+#     start_date = Column(DateTime, nullable=False)
+#     end_date = Column(DateTime, nullable=False)
+#     metadata_json = Column(JSON, nullable=True)
+#     created_at = Column(DateTime, server_default=func.now())
+#     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
 class Metric(Base):
     __tablename__ = "metrics"
@@ -79,3 +81,30 @@ class Report(Base):
     period_end = Column(DateTime, nullable=True)
     created_at = Column(DateTime, server_default=func.now())
     completed_at = Column(DateTime, nullable=True)
+
+
+
+class AwsService(Base):
+
+    __tablename__ = "aws_service"
+
+    id = Column(Integer, primary_key=True, index=True)
+    activity_date = Column(DateTime, nullable=False, index=True)
+    service_name = Column(String(255), nullable=False, index=True)
+    cost = Column(Float, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class AwsCost(Base):
+
+    __tablename__ = "aws_service_usage"
+
+    id = Column(Integer, primary_key=True, index=True)
+    activity_date = Column(DateTime, nullable=False, index=True)
+    service_name = Column(String(255), nullable=False, index=True)
+    usage_type = Column(String(255), nullable=False, index=True)
+    cost = Column(Float, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+ 

@@ -40,6 +40,7 @@ app.include_router(services.router, tags=["Services"])
 app.include_router(departments.router, tags=["Departments"])
 app.include_router(reports.router, tags=["Reports"])
 app.include_router(sync.router, tags=["Sync"])
+# app.include_router(debug.router)
 
 @app.get("/")
 def root():

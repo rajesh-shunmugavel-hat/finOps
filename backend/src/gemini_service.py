@@ -1,28 +1,31 @@
 import json
 from datetime import datetime
-from typing import Dict, Any, List, Optional
-from openai import OpenAI
+from typing import Dict, Any, List
+
+import google.generativeai as genai
 from sqlalchemy.orm import Session
-from src.config import OPENAI_API_KEY
-from src.models import Report, ReportStatus, AwsCost, Metric
+
+from src.config import GEMINI_API_KEY
+from src.models import Report, ReportStatus
 import logging
 
 logger = logging.getLogger(__name__)
 
-class OpenAIService:
+class GeminiService:
     def __init__(self):
         self._client = None
     
     @property
     def client(self):
         if self._client is None:
-            if not OPENAI_API_KEY:
-                raise ValueError("OPENAI_API_KEY environment variable is not set. Please configure it to use AI reports.")
-            self._client = OpenAI(api_key=OPENAI_API_KEY)
+            if not GEMINI_API_KEY:
+                raise ValueError("GEMINI_API_KEY environment variable is not set. Please configure it to use AI reports.")
+            genai.configure(api_key=GEMINI_API_KEY)
+            self._client = genai.GenerativeModel('gemini-1.5-flash')
         return self._client
     
     def is_configured(self) -> bool:
-        return OPENAI_API_KEY is not None and len(OPENAI_API_KEY) > 0
+        return GEMINI_API_KEY is not None and len(GEMINI_API_KEY) > 0
     
     def generate_cost_optimization_report(
         self, 
@@ -40,24 +43,16 @@ class OpenAIService:
         db.commit()
         
         try:
-            prompt = self._build_analysis_prompt(cost_data, metrics_data, scope)
-            
-            response = self.client.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": """You are an expert AWS FinOps consultant specializing in cloud cost optimization. 
+            system_prompt = """You are an expert AWS FinOps consultant specializing in cloud cost optimization. 
 Your task is to analyze AWS cost and usage data, compare it with CloudWatch metrics, and provide actionable recommendations.
 
 For each analysis, you must:
 1. Identify the AWS services and their usage patterns
-2. Provide a detailed cost and metric breakdown
-3. Compare metrics vs cost to determine if the cost is justified
-4. If cost is justified, explain why based on utilization metrics
-5. If cost is NOT justified, provide concrete steps to reduce cost
-6. Suggest specific AWS services, features, or configurations for savings
-7. Provide a final cost report with prioritized recommendations
+2. Compare metrics vs cost to determine if the cost is justified
+3. If cost is justified, explain why based on utilization metrics
+4. If cost is NOT justified, provide concrete steps to reduce cost
+5. Suggest specific AWS services, features, or configurations for savings
+6. Provide a final cost report with prioritized recommendations
 
 Always structure your response as valid JSON with the following format:
 {
@@ -67,54 +62,37 @@ Always structure your response as valid JSON with the following format:
     "savings_percentage": 0.00,
     "findings": [
         {
-            "service": "Service Name",
-            "current_cost": 0.00,
-            "utilization_level": "low/medium/high",
-            "cost_justified": true/false,
-            "justification": "Explanation",
+            "issue": "what the issue is - t3 large instance running at 8%",
+            "recommendation": "recommendation to solve",
+            "justification": "Not Justified" or "Partially Justified" or "Justified",
             "potential_savings": 0.00
-        }
-    ],
-    "recommendations": [
+        },
         {
-            "priority": "high/medium/low",
-            "service": "Service Name",
-            "action": "Specific action to take",
-            "estimated_savings": 0.00,
-            "implementation_effort": "low/medium/high",
-            "description": "Detailed description of the recommendation",
-            "aws_features": ["List of AWS features/services to use"]
-        }
-    ],
-    "optimization_opportunities": [
-        {
-            "category": "rightsizing/reserved_instances/spot_instances/storage_optimization/etc",
-            "description": "Description of the opportunity",
-            "affected_services": ["List of services"],
-            "estimated_impact": 0.00
+            "issue": "t3 micro memory usage spike",
+            "recommendation": "upside memory",
+            "justification": "Not Justified" or "Partially Justified" or "Justified",
+            "potential_savings": 0.00
         }
     ]
 }"""
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                temperature=0.3,
-                max_tokens=4000
-            )
             
-            ai_response = response.choices[0].message.content
+            user_prompt = self._build_analysis_prompt(cost_data, metrics_data, scope)
+            
+            full_prompt = system_prompt + "\n" + user_prompt
+            
+            response = self.client.generate_content(full_prompt)
+            
+            ai_response = response.text
             
             try:
-                json_start = ai_response.find('{')
-                json_end = ai_response.rfind('}') + 1
-                if json_start >= 0 and json_end > json_start:
-                    json_str = ai_response[json_start:json_end]
-                    parsed_response = json.loads(json_str)
-                else:
-                    parsed_response = {"raw_response": ai_response}
+                # Gemini often wraps the JSON in ```json ... ```, so we need to extract it.
+                json_str = ai_response.strip()
+                if json_str.startswith("```json"):
+                    json_str = json_str[7:]
+                if json_str.endswith("```"):
+                    json_str = json_str[:-3]
+                
+                parsed_response = json.loads(json_str)
             except json.JSONDecodeError:
                 parsed_response = {"raw_response": ai_response}
             
@@ -221,4 +199,7 @@ Focus on identifying:
         
         return prompt
 
-openai_service = OpenAIService()
+gemini_service = GeminiService()
+
+
+
