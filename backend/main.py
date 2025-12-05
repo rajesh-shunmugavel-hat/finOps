@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from src.database import init_db
-from src.routers import health, dashboard, services, departments, reports, sync
+from src.routers import health, dashboard, services, departments, reports, sync, debug
 import logging
 
 logging.basicConfig(
@@ -40,6 +40,7 @@ app.include_router(services.router, tags=["Services"])
 app.include_router(departments.router, tags=["Departments"])
 app.include_router(reports.router, tags=["Reports"])
 app.include_router(sync.router, tags=["Sync"])
+app.include_router(debug.router)
 
 @app.get("/")
 def root():
