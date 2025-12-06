@@ -115,3 +115,13 @@ class AwsServiceOperation(Base):
     cost = Column(Float, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+class EC2CPUUtilization(Base):
+    __tablename__ = "ec2_cpu_utilization"
+
+    resource_id = Column(String, primary_key=True, index=True)
+    instance_name = Column(String, nullable=False)
+    metric_name = Column(String, nullable=False)
+    timestamp = Column(DateTime(timezone=True), primary_key=True)
+    value = Column(Float, nullable=False)
+
